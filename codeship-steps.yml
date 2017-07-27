@@ -1,0 +1,20 @@
+### CI for all branches
+# build
+- name: dockerhub-redirect
+  tag: ^(master)
+  service: redirect
+  type: push
+  image_name: 766040732596.dkr.ecr.us-west-2.amazonaws.com/https-redirect
+  image_tag: "latest"
+  registry: https://766040732596.dkr.ecr.us-west-2.amazonaws.com
+  dockercfg_service: awsgenerator
+
+# ShowTracker Staging
+- service: awsdeployment
+  tag: ^(master)
+  command: aws ecs update-service --cluster showtracker-2017-staging --service redirect-staging-service --task-definition https-redirect
+
+# ShowTracker Production
+- service: awsdeployment
+  tag: ^(master)
+  command: aws ecs update-service --cluster showtracker-2017-production --service redirect-production-service --task-definition https-redirect

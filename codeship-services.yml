@@ -1,0 +1,20 @@
+### AWS Deployment
+awsgenerator: 
+  image: codeship/aws-ecr-dockercfg-generator
+  encrypted_env_file: config/aws-deployment.env.encrypted
+  add_docker: true
+  
+awsdeployment:
+  image: codeship/aws-deployment
+  environment:
+    - AWS_DEFAULT_REGION=us-west-2
+  encrypted_env_file: config/aws-deployment.env.encrypted
+  volumes:
+    - ./:/deploy
+
+redirect:
+  build:
+    restart: always
+    context: ./
+    dockerfile: Dockerfile
+  cached: true
